@@ -1,46 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import { Card, CardContent, CardImage, CardTitle } from "./src/components/Card";
 import tw from "twrnc";
 
 export default function App() {
-  const [buttonColor, setButtonColor] = useState("bg-blue-500");
-  const [backgroundColor, setBackgroundColor] = useState("bg-red-500");
-  const [imageUrl, setImageUrl] = useState("https://source.unsplash.com/random");
+  const [buttonColor, setButtonColor] = useState(getRandomColor());
+  const [backgroundColor, setBackgroundColor] = useState(getRandomColor());
+  const [imageUrl, setImageUrl] = useState(
+    "https://source.unsplash.com/random"
+  );
+  const imageRef = useRef();
 
   const handlePress = () => {
-    const randomColor = getRandomColor();
-    setButtonColor(`bg-${randomColor}-700`);
-    setBackgroundColor(`bg-${randomColor}-500`);
+    setButtonColor(getRandomColor());
+    setBackgroundColor(getRandomColor());
     setImageUrl(`https://source.unsplash.com/random?t=${Date.now()}`);
   };
 
   function getRandomColor() {
-    const colors = [
-      "red", 
-      "blue", 
-      "green", 
-      "yellow", 
-      "indigo", 
-      "purple", 
-      "pink", 
-      "teal", 
-      "orange", 
-      "lime", 
-      "cyan", 
-      "fuchsia", 
-      "rose", 
-      "amber", 
-      "gray", 
-      "true-gray"
-    ];
-    
-    return colors[Math.floor(Math.random() * colors.length)];
+    const letters = "0123456789ABCDEF";
+    let color = "#";
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
   }
 
   return (
-    <View style={[styles.container, tw`${backgroundColor}`]}>
+    <View style={[styles.container, { backgroundColor }]}>
       <Card style={tw`w-full max-w-sm shadow`}>
         <CardContent style={tw`gap-1`}></CardContent>
         <CardTitle style={tw`text-white text-center mb-6`}>Juan Diego Mendoza Gutierrez</CardTitle>
@@ -49,9 +37,8 @@ export default function App() {
           <TouchableOpacity onPress={handlePress}>
             <Text
               style={[
-                tw`font-bold items-center justify-center leading-10 rounded-2 h-10 text-center ${buttonColor}`,
-                
-                { color: "#fff" },
+                tw`font-bold items-center justify-center leading-10 rounded-2 h-10 text-center`,
+                { backgroundColor: buttonColor, color: "#fff" },
               ]}
             >
               Cambiar estilo
